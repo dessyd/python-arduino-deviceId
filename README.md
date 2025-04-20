@@ -114,4 +114,4 @@ Ce projet est sous licence MIT.
 
 ## Auteur
 
-Votre Nom - [votre@email.com](mailto:votre@email.com)
+Votre Nom - [Dominique Dessy](mailto:reprendre.mezzo_0j@icloud.com)
