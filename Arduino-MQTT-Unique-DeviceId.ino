@@ -49,7 +49,8 @@ bool ensureWiFiConnection() {
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
+  unsigned long startTime = millis();
+  while (!Serial && millis() - startTime < 5000);
   
   // Initialiser la puce ECCX08
   if (!ECCX08.begin()) {
