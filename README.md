@@ -38,17 +38,19 @@ cd arduino-id-manager
 python server.py
 ```
 
-### Configuration
+## Configuration
 
-Modifiez les variables suivantes dans `server.py` :
+### Fichier .env
 
-```python
-# Adresse IP du broker MQTT (la même pour tous les appareils)
-MQTT_BROKER_IP = "192.168.1.200"  # Remplacer par l'adresse de votre broker
+Pour configurer l'adresse IP du broker MQTT, le chemin du fichier de mappage et le port du serveur, créez un fichier `.env` à la racine du projet avec le contenu suivant :
 
-# Port sur lequel le serveur écoute
-SERVER_PORT = 5000
 ```
+MQTT_BROKER_IP=192.168.1.15
+MAP_FILE=device_map.pickle
+SERVER_PORT=5000
+```
+
+Remplacez `192.168.1.15` par l'adresse IP de votre broker MQTT, `device_map.pickle` par le chemin souhaité pour le fichier de mappage, et `5000` par le port souhaité pour le serveur si nécessaire.
 
 ## Client Arduino
 
