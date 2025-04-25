@@ -15,7 +15,7 @@ const int RETRY_TIMEOUT = 2000;
 const long WIFI_CHECK_INTERVAL = 5000; // Vérification de la connexion WiFi toutes les 5 secondes
 
 byte deviceID = 0;
-char macAddress[18];
+char macAddress[18];  // XX:XX:XX:XX:XX:XX\0
 char mqttBrokerIP[16] = "";
 WiFiUDP udp;
 unsigned long lastRetryTime = 0;
@@ -67,29 +67,18 @@ void setup()
       ;
   }
 
-  // Obtenir le numéro de série du chip ECC508
-  byte serialNumber[9]; // Le S/N est sur 9 octets (72 bits)
-  char hexString[19];   // Chaîne pour stocker la représentation hex (18 caractères + null)
-
-  if (!ECCX08.serialNumber(serialNumber))
-  {
-    Serial.println("Échec de récupération du numéro de série!");
-    while (1)
-      ;
-  }
-    // Conversion du tableau d'octets en chaîne hexadécimale
-    for (int i = 0; i < 9; i++) {
-      sprintf(&hexString[i*2], "%02X", serialNumber[i]);
-    }  
-  Serial.print("Serial number: ");
-  Serial.println(hexString);
-
   // Première tentative de connexion WiFi
   Serial.print("Connexion au WiFi");
   if (ensureWiFiConnection())
   {
     // Initialiser UDP
     udp.begin(8888);
+
+    // Obtenir l'adresse MAC formatée
+    byte mac[6];
+    WiFi.macAddress(mac);
+    sprintf(macAddress, "%02X:%02X:%02X:%02X:%02X:%02X", 
+          mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
     // Première tentative d'obtention d'ID
     requestID();
