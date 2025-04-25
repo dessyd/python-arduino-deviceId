@@ -9,7 +9,7 @@ load_dotenv()
 
 # Configuration du logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 # Configuration du fichier de mappage (la même pour tous les appareils)
@@ -47,12 +47,12 @@ def start_server(host="0.0.0.0", port=SERVER_PORT):
     try:
         while True:
             data, client_address = server.recvfrom(1024)
-
+            
             # Format attendu: MAC (17 octets) + ':' (1 octet) + token (4 octets)
             if len(data) == 22:
-                mac_address = data[:17].decode("ascii")
+                mac_address = data[:17].decode('ascii')
                 token = data[18:22]  # 4 octets bruts du token
-
+                
                 # Vérifier si cet appareil a déjà un ID
                 if mac_address in device_map:
                     assigned_id = device_map[mac_address]
@@ -61,32 +61,26 @@ def start_server(host="0.0.0.0", port=SERVER_PORT):
                     assigned_id = next_id
                     device_map[mac_address] = assigned_id
                     next_id = (next_id % 255) + 1
-
+                    
                     # Sauvegarder la carte
-                    with open(MAP_FILE, "wb") as f:
+                    with open(MAP_FILE, 'wb') as f:
                         pickle.dump(device_map, f)
-
-                # Envoyer l'ID, le token pour authentification et l'adresse IP du broker MQTT
+                
+                # Envoyer l'ID et renvoyer le token pour authentification
                 response = bytearray([assigned_id])
                 response.extend(token)  # Renvoyer le même token
-                response.extend(
-                    MQTT_BROKER_IP.encode("ascii")
-                )  # Ajouter l'adresse IP du broker
+                response.extend(MQTT_BROKER_IP.encode('ascii'))  # Ajouter l'adresse IP du broker
 
+                
                 server.sendto(response, client_address)
-                logging.info(
-                    f"Assigned ID {assigned_id} to device with MAC {mac_address}"
-                )
+                print(f"Assigned ID {assigned_id} to device with MAC {mac_address}")
             else:
-                logging.warning(
-                    f"Invalid request format from {client_address}: {len(data)} bytes"
-                )
-
+                print(f"Invalid request format from {client_address}: {len(data)} bytes")
+                
     except KeyboardInterrupt:
-        logging.info("Server shutting down...")
+        print("Server shutting down...")
     finally:
         server.close()
-
 
 if __name__ == "__main__":
     start_server()
