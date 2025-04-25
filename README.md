@@ -31,11 +31,11 @@ Le serveur utilise un socket UDP pour recevoir les demandes des appareils Arduin
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/votre-nom/arduino-id-manager.git
-cd arduino-id-manager
+git clone https://github.com/dessyd/python-arduino-deviceId.git
+cd python-arduino-deviceId
 
 # Exécuter le serveur
-python server.py
+python id_server.py
 ```
 
 ## Configuration
