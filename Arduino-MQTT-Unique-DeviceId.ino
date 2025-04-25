@@ -96,10 +96,11 @@ bool requestID() {
     ECCX08.random(randomToken, sizeof(randomToken));
     
     // Préparer le message: MAC + token
-    char message[22];  // 17 (MAC) + 1 (séparateur) + 4 (token binaire)
-    memcpy(message, macAddress, 17);
-    message[17] = ':';  // Séparateur
-    memcpy(&message[18], randomToken, 4);
+    int size_of_MAC = sizeof(macAddress) - 1; // to remove \0 
+    char message[size_of_MAC +1 + sizeof(randomToken)];  // 17 (MAC) + 1 (séparateur) + 4 (token binaire)
+    memcpy(message, macAddress, size_of_MAC);
+    message[size_of_MAC] = ':';  // Séparateur
+    memcpy(&message[size_of_MAC+1], randomToken, 4);
     
     // Envoyer la demande avec le token
     udp.beginPacket(server_ip, server_port);
