@@ -8,9 +8,10 @@ import os
 import pickle
 import socket
 import logging
-from typing import Dict, Optional, Tuple, Final
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict, Optional, Tuple
+
 from dotenv import load_dotenv
 
 
@@ -27,7 +28,8 @@ class ServerConfig:
 def setup_logging() -> None:
     """Configure le système de journalisation"""
     logging.basicConfig(
-        level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s"
     )
 
 
